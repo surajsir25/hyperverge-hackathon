@@ -17,8 +17,23 @@ const PostSchema = new Schema({
         type: String
     },
     feedback:{
-        type:String
+        type: String
     },
+    // feedback:[
+    //     {
+    //         user:{
+    //             type:Schema.Types.ObjectId,
+    //             ref:'learner'
+    //         },
+    //         text:{
+    //             type: String,
+    //             required:true
+    //         },
+    //         name:{
+    //             type:String
+    //         }
+    //     }  
+    // ],
     project_rating:{
         type:String
     }

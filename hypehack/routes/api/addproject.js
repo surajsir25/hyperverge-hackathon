@@ -63,4 +63,83 @@ router.get('/', auth, async(req, res) => {
     }
 });
 
+
+
+
+// @route   GET api/addproject/:id
+// @desc    Get project by ID
+// @access  Private
+
+// router.get('/:id', auth, async(req, res) => {
+//     try {
+//         const posts = await Learner.findById(req.params.id);
+//         console.log(posts);
+//         if(!post){
+//             return res.status(404).json({msg: 'Post not found'});
+//         }
+//         res.json(posts);
+//     } catch (err) {
+//         console.error(err.message);
+//         if(err.kind === 'ObjectId'){
+//             return res.status(404).json({msg: 'Post not found'});
+//         }
+//         res.status(500).send('server error');
+//     }
+// });
+
+
+
+
+// @route   POST api/addproject/feedback/:id
+// @desc    give feedback on a project
+// @access  Private
+
+
+router.post('/feedback/:id',
+    [
+        auth, 
+        [
+            check('text', 'Text is required')
+            .not()
+            .isEmpty()
+        ]
+    ], 
+    async (req, res) => {
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            return res.status(400).json({errors: errors.array()});
+        }
+        try {
+            const user = await Learner.findById(req.user.id).select('-password');
+            
+            const post = await Projectt.findById(req.params.id);
+            
+            const newFeedback ={
+                text: req.body.text,
+                name: user.name,
+                // user: req.user.id
+            };
+
+            post.feedback.unshift(newFeedback);
+            await post.save();
+            res.json(post.feedback);
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).send('server error');
+        }
+    }
+);
+
+
+
+router.post('/addreview',async(req,res)=>{
+    let learner = await Projectt.findOneAndUpdate({user:req.user.id},{
+        feedback:req.body.feedback,
+        project_rating:req.body.project_rating
+    },
+    {new:true})
+    res.send(learner)
+})
+
+
 module.exports = router;

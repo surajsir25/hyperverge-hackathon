@@ -25,15 +25,12 @@ router.post('/',
     
     async (req, res) => {
         const errors = validationResult(req);
-        console.log('i am here');
         if(!errors.isEmpty()){
             return res.status(400).json({errors: errors.array()});
         }
         
         try {
-            console.log('i am here too');
             const user = await Learner.findById(req.user.id).select('-password');
-            console.log('i am here too');
             const newPost =  new Post({
                 post: req.body.post,
                 location: req.body.location,
@@ -62,6 +59,54 @@ router.get('/', auth, async(req, res) => {
     try {
         const posts = await Post.find();
         res.json(posts);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('server error');
+    }
+});
+
+
+
+// @route   PUT api/addpost/applied/:id
+// @desc    apply for a post
+// @access  Private
+router.put('/applied/:id', auth, async(req, res) =>{
+    try {
+        const post = await Post.findById(req.params.id);
+
+        // check if the post is already applied
+        if(post.applied.filter(like => String(like.user) === req.user.id).length >0){
+            return res.status(400).json({msg:'post already applied'});
+        }
+        post.applied.unshift({user: req.user.id});
+        await post.save();
+        res.json(post.applied);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('server error');
+    }
+});
+
+
+
+// @route   PUT api/addpost/withdraw/:id
+// @desc    withdraw application for a post
+// @access  Private
+router.put('/withdraw/:id', auth, async(req, res) =>{
+    try {
+        const post = await Post.findById(req.params.id);
+
+        // check if the post is already applied
+        if(post.applied.filter(like => String(like.user) === req.user.id).length === 0){
+            return res.status(400).json({msg:'Post is not yet been applied'});
+        }
+
+        // Get remove index
+        const removeIndex = post.applied.map(like => String(like.user)).indexOf(req.user.id);
+        post.applied.splice(removeIndex, 1);
+
+        await post.save();
+        res.json(post.applied);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('server error');
