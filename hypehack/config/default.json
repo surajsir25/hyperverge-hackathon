@@ -1,0 +1,4 @@
+{
+    "mongoURI" : "mongodb+srv://anujbhatt123:anujbhatt123@devconnector.6zatb.mongodb.net/hackodb?retryWrites=true&w=majority",
+    "secretkey" : "mysecrettoken"
+}
