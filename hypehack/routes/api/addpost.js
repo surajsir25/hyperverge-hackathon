@@ -70,6 +70,7 @@ router.get('/', auth, async(req, res) => {
 // @route   PUT api/addpost/applied/:id
 // @desc    apply for a post
 // @access  Private
+
 router.put('/applied/:id', auth, async(req, res) =>{
     try {
         const post = await Post.findById(req.params.id);

@@ -16,24 +16,24 @@ const PostSchema = new Schema({
     project_description:{
         type: String
     },
-    feedback:{
-        type: String
-    },
-    // feedback:[
-    //     {
-    //         user:{
-    //             type:Schema.Types.ObjectId,
-    //             ref:'learner'
-    //         },
-    //         text:{
-    //             type: String,
-    //             required:true
-    //         },
-    //         name:{
-    //             type:String
-    //         }
-    //     }  
-    // ],
+    // feedback:{
+    //     type: String
+    // },
+    feedback:[
+        {
+            user:{
+                type:Schema.Types.ObjectId,
+                ref:'learner'
+            },
+            text:{
+                type: String,
+                required:true
+            },
+            name:{
+                type:String
+            }
+        }  
+    ],
     project_rating:{
         type:String
     }

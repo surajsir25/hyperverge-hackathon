@@ -65,31 +65,6 @@ router.get('/', auth, async(req, res) => {
 
 
 
-
-// @route   GET api/addproject/:id
-// @desc    Get project by ID
-// @access  Private
-
-// router.get('/:id', auth, async(req, res) => {
-//     try {
-//         const posts = await Learner.findById(req.params.id);
-//         console.log(posts);
-//         if(!post){
-//             return res.status(404).json({msg: 'Post not found'});
-//         }
-//         res.json(posts);
-//     } catch (err) {
-//         console.error(err.message);
-//         if(err.kind === 'ObjectId'){
-//             return res.status(404).json({msg: 'Post not found'});
-//         }
-//         res.status(500).send('server error');
-//     }
-// });
-
-
-
-
 // @route   POST api/addproject/feedback/:id
 // @desc    give feedback on a project
 // @access  Private
@@ -117,10 +92,11 @@ router.post('/feedback/:id',
             const newFeedback ={
                 text: req.body.text,
                 name: user.name,
-                // user: req.user.id
+                user: req.user.id
             };
 
             post.feedback.unshift(newFeedback);
+            console.log(feedback);
             await post.save();
             res.json(post.feedback);
         } catch (err) {

@@ -48,8 +48,6 @@ router.post('/', auth ,async (req,res)=>{
         mentor 
     } = req.body;
 
-    
-
     const profileFeilds = {};
     profileFeilds.user = req.user.id;
     if(contact_number) profileFeilds.contact_number = contact_number;
